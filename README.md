@@ -1,5 +1,5 @@
-## Android-Practica-3
+# Android-Practica-3
 
-# Autores:
+## Autores:
 Álvaro Sal Fernández
 Pablo M. Sáncez Trujillo
