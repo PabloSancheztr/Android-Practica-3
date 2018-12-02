@@ -30,4 +30,22 @@ public abstract class GameObject {
     public void onRemovedFromGameUiThread(){
     }
 
+    public void onPostUpdate(GameEngine gameEngine) {
+    }
+
+    public void addToGameEngine(GameEngine gameEngine) {
+        gameEngine.addGameObject(this);
+    }
+
+    public void removeFromGameEngine(GameEngine gameEngine) {
+        gameEngine.removeGameObject(this);
+    }
+
+    public void onAddedToGameEngine() {
+
+    }
+
+    public void onRemoveFromGameEngine() {
+
+    }
 }

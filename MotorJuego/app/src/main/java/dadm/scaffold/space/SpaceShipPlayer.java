@@ -5,6 +5,7 @@ import java.util.List;
 
 import dadm.scaffold.R;
 import dadm.scaffold.engine.GameEngine;
+import dadm.scaffold.engine.ScreenGameObject;
 import dadm.scaffold.engine.Sprite;
 import dadm.scaffold.input.InputController;
 
@@ -21,10 +22,10 @@ public class SpaceShipPlayer extends Sprite {
 
 
     public SpaceShipPlayer(GameEngine gameEngine){
-        super(gameEngine, R.drawable.ship);
+        super(gameEngine, R.drawable.ship, bodyType.Circular);
         speedFactor = pixelFactor * 100d / 1000d; // We want to move at 100px per second on a 400px tall screen
-        maxX = gameEngine.width - imageWidth;
-        maxY = gameEngine.height - imageHeight;
+        maxX = gameEngine.width - width;
+        maxY = gameEngine.height - height;
 
         initBulletPool(gameEngine);
     }
@@ -49,8 +50,8 @@ public class SpaceShipPlayer extends Sprite {
 
     @Override
     public void startGame() {
-        positionX = maxX / 2;
-        positionY = maxY / 2;
+        X = maxX / 2;
+        Y = maxY / 2;
     }
 
     @Override
@@ -60,20 +61,40 @@ public class SpaceShipPlayer extends Sprite {
         checkFiring(elapsedMillis, gameEngine);
     }
 
+    @Override
+    public void addToGameEngine(GameEngine gameEngine) {
+        super.addToGameEngine(gameEngine);
+    }
+
+    @Override
+    public void removeFromGameEngine(GameEngine gameEngine) {
+        super.removeFromGameEngine(gameEngine);
+    }
+
+    @Override
+    public void onCollision(GameEngine gameEngine, ScreenGameObject otherObject) {
+        if(otherObject instanceof Asteroid) {
+            removeFromGameEngine(gameEngine);
+            //gameEngine.stopGame();
+            Asteroid a = (Asteroid) otherObject;
+            a.removeFromGameEngine(gameEngine);
+        }
+    }
+
     private void updatePosition(long elapsedMillis, InputController inputController) {
-        positionX += speedFactor * inputController.horizontalFactor * elapsedMillis;
-        if (positionX < 0) {
-            positionX = 0;
+        X += speedFactor * inputController.horizontalFactor * elapsedMillis;
+        if (X < 0) {
+            X = 0;
         }
-        if (positionX > maxX) {
-            positionX = maxX;
+        if (X > maxX) {
+            X = maxX;
         }
-        positionY += speedFactor * inputController.verticalFactor * elapsedMillis;
-        if (positionY < 0) {
-            positionY = 0;
+        Y += speedFactor * inputController.verticalFactor * elapsedMillis;
+        if (Y < 0) {
+            Y = 0;
         }
-        if (positionY > maxY) {
-            positionY = maxY;
+        if (Y > maxY) {
+            Y = maxY;
         }
     }
 
@@ -83,7 +104,7 @@ public class SpaceShipPlayer extends Sprite {
             if (bullet == null) {
                 return;
             }
-            bullet.init(this, positionX + imageWidth/2, positionY);
+            bullet.init(this, X + width/2, Y);
             gameEngine.addGameObject(bullet);
             timeSinceLastFire = 0;
         }

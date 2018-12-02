@@ -2,23 +2,29 @@ package dadm.scaffold.engine;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import dadm.scaffold.input.InputController;
 
 public class GameEngine {
 
-
     private List<GameObject> gameObjects = new ArrayList<GameObject>();
     private List<GameObject> objectsToAdd = new ArrayList<GameObject>();
     private List<GameObject> objectsToRemove = new ArrayList<GameObject>();
+    private List<ScreenGameObject> collisionableObjects = new ArrayList<ScreenGameObject>();
+    private List<Collision> detectedCollision = new ArrayList<Collision>();
 
     private UpdateThread theUpdateThread;
     private DrawThread theDrawThread;
     public InputController theInputController;
+    public Random mRandom = new Random();
     private final GameView theGameView;
+    private QuadTree quadTree = new QuadTree();
 
     public int width;
     public int height;
@@ -38,7 +44,7 @@ public class GameEngine {
 
         this.pixelFactor = this.height / 400d;
 
-
+        quadTree.setArea(new Rect(0, 0, width, height));
     }
 
     public void setTheInputController(InputController inputController) {
@@ -95,7 +101,7 @@ public class GameEngine {
         if (isRunning()) {
             objectsToAdd.add(gameObject);
         } else {
-            gameObjects.add(gameObject);
+            addToGame(gameObject);
         }
         mainActivity.runOnUiThread(gameObject.onAddedRunnable);
     }
@@ -109,15 +115,41 @@ public class GameEngine {
         int numGameObjects = gameObjects.size();
         for (int i = 0; i < numGameObjects; i++) {
             gameObjects.get(i).onUpdate(elapsedMillis, this);
+            gameObjects.get(i).onPostUpdate(this);
         }
+        checkCollisions();
         synchronized (gameObjects) {
             while (!objectsToRemove.isEmpty()) {
-                gameObjects.remove(objectsToRemove.remove(0));
+                GameObject objectToRemove = objectsToRemove.remove(0);
+                gameObjects.remove(objectToRemove);
+                if(objectToRemove instanceof ScreenGameObject) {
+                    quadTree.removeGameObject((ScreenGameObject) objectToRemove);
+                }
+                objectToRemove.onRemoveFromGameEngine();
             }
             while (!objectsToAdd.isEmpty()) {
-                gameObjects.add(objectsToAdd.remove(0));
+                GameObject gameObject = objectsToAdd.remove(0);
+                addToGame(gameObject);
             }
         }
+    }
+
+    private void checkCollisions() {
+        while(!detectedCollision.isEmpty()) {
+            Collision.release(detectedCollision.remove(0));
+        }
+        quadTree.checkCollisions(this, detectedCollision);
+    }
+
+    private void addToGame(GameObject gameObject) {
+        gameObjects.add(gameObject);
+        if(gameObject instanceof ScreenGameObject) {
+            ScreenGameObject sgo = (ScreenGameObject) gameObject;
+            if(sgo.objectBodyType != ScreenGameObject.bodyType.None) {
+                quadTree.addGameObject(sgo);
+            }
+        }
+        gameObject.onAddedToGameEngine();
     }
 
     public void onDraw() {
