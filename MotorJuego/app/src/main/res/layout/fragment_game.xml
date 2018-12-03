@@ -13,14 +13,43 @@
         android:layout_height="match_parent" />
 
     <Button
-        android:layout_gravity="top|right"
         android:id="@+id/btn_play_pause"
+        android:layout_width="65dp"
+        android:layout_height="60dp"
+        android:layout_gravity="top|right"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:background="@drawable/pause" />
+
+    <include layout="@layout/view_joystick" />
+
+    <TextView
+        android:id="@+id/scoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pause" />
+        android:layout_marginTop="60dp"
+        android:text="Score: 0"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
-    <include layout="@layout/view_joystick"/>
+    <TextView
+        android:id="@+id/livesText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/score_value"
+        android:layout_alignLeft="@+id/score_value"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="Vidas:"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
+    <LinearLayout
+        android:id="@+id/livesImgs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" />
 </FrameLayout>

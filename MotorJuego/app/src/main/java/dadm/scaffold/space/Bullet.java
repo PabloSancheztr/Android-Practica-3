@@ -1,6 +1,7 @@
 package dadm.scaffold.space;
 
 import dadm.scaffold.R;
+import dadm.scaffold.counter.GameEvent;
 import dadm.scaffold.engine.GameEngine;
 import dadm.scaffold.engine.ScreenGameObject;
 import dadm.scaffold.engine.Sprite;
@@ -18,7 +19,7 @@ public class Bullet extends Sprite {
     }
 
     @Override
-    public void startGame() {}
+    public void startGame(GameEngine gameEngine) {}
 
     @Override
     public void onUpdate(long elapsedMillis, GameEngine gameEngine) {
@@ -48,6 +49,7 @@ public class Bullet extends Sprite {
             removeFromGameEngine(gameEngine);
             Asteroid asteroid = (Asteroid) otherObject;
             asteroid.removeFromGameEngine(gameEngine);
+            gameEngine.onGameEnvent(GameEvent.asteroidHit);
         }
     }
 }

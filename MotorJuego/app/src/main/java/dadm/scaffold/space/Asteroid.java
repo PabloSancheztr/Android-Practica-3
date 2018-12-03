@@ -1,6 +1,7 @@
 package dadm.scaffold.space;
 
 import dadm.scaffold.R;
+import dadm.scaffold.counter.GameEvent;
 import dadm.scaffold.engine.GameController;
 import dadm.scaffold.engine.GameEngine;
 import dadm.scaffold.engine.Sprite;
@@ -21,7 +22,7 @@ public class Asteroid extends Sprite {
     }
 
     @Override
-    public void startGame() {
+    public void startGame(GameEngine gameEngine) {
 
     }
 
@@ -39,6 +40,7 @@ public class Asteroid extends Sprite {
 
         // Check if the sprite goes out of the screen
         if(Y > gameEngine.height) {
+            gameEngine.onGameEnvent(GameEvent.asteroidMissed);
             removeFromGameEngine(gameEngine);
         }
     }

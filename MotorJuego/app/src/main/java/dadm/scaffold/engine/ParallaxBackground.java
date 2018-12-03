@@ -38,8 +38,7 @@ public class ParallaxBackground extends GameObject {
     }
 
     @Override
-    public void startGame() {
-
+    public void startGame(GameEngine gameEngine) {
     }
 
     @Override

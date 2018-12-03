@@ -2,9 +2,11 @@ package dadm.scaffold.engine;
 
 import android.graphics.Canvas;
 
+import dadm.scaffold.counter.GameEvent;
+
 public abstract class GameObject {
 
-    public abstract void startGame();
+    public abstract void startGame(GameEngine gameEngine);
 
     public abstract void onUpdate(long elapsedMillis, GameEngine gameEngine);
 
@@ -42,10 +44,11 @@ public abstract class GameObject {
     }
 
     public void onAddedToGameEngine() {
-
     }
 
     public void onRemoveFromGameEngine() {
+    }
 
+    public void onGameEvent(GameEvent gameEvent) {
     }
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import dadm.scaffold.counter.GameEvent;
 import dadm.scaffold.input.InputController;
 
 public class GameEngine {
@@ -29,6 +30,10 @@ public class GameEngine {
     public int width;
     public int height;
     public double pixelFactor;
+
+    public enum GameEnvent {
+
+    }
 
     private Activity mainActivity;
 
@@ -58,7 +63,7 @@ public class GameEngine {
         // Setup the game objects
         int numGameObjects = gameObjects.size();
         for (int i = 0; i < numGameObjects; i++) {
-            gameObjects.get(i).startGame();
+            gameObjects.get(i).startGame(this);
         }
 
         // Start the update thread
@@ -166,5 +171,12 @@ public class GameEngine {
 
     public Context getContext() {
         return theGameView.getContext();
+    }
+
+    public void onGameEnvent(GameEvent gameEvent) {
+        int numObjects = gameObjects.size();
+        for(int i = 0; i < numObjects; i++) {
+            gameObjects.get(i).onGameEvent(gameEvent);
+        }
     }
 }

@@ -25,7 +25,7 @@ public class FramesPerSecondCounter extends GameObject {
     }
 
     @Override
-    public void startGame() {
+    public void startGame(GameEngine gameEngine) {
         totalMillis = 0;
     }
 

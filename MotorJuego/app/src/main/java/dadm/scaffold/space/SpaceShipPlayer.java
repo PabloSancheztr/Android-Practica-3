@@ -49,7 +49,7 @@ public class SpaceShipPlayer extends Sprite {
 
 
     @Override
-    public void startGame() {
+    public void startGame(GameEngine gameEngine) {
         X = maxX / 2;
         Y = maxY / 2;
     }
